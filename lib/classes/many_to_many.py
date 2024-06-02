@@ -10,7 +10,8 @@ class Article:
             raise TypeError("title must be a string")
         if len(title) < 5 or len(title) > 50:
             raise ValueError("title must be between 5 and 50 characters")
-self._author = author
+        
+        self._author = author
         self._magazine = magazine
         self._title = title
         
@@ -45,9 +46,6 @@ self._author = author
         self._author._articles.remove(self)
         self._author = new_author
         new_author._articles.append(self)
-
-
-
 
 
 
