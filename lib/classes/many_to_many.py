@@ -47,25 +47,41 @@ class Article:
         self._author = new_author
         new_author._articles.append(self)
 
+class Author:
+    all_authors = []
 
-
-#class Author:
     def __init__(self, name):
-        self.name = name
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if len(name) == 0:
+            raise ValueError("name must be longer than 0 characters")
+
+        self._name = name
+        self._articles = []
+        Author.all_authors.append(self)
+
+    @property
+    def name(self):
+        return self._name
 
     def articles(self):
-        pass
+        return list(self._articles)
 
     def magazines(self):
-        pass
+        return list(set(article.magazine for article in self._articles))
 
     def add_article(self, magazine, title):
-        pass
+        return Article(self, magazine, title)
 
     def topic_areas(self):
-        pass
+        areas = set(article.magazine.category for article in self._articles)
+        return list(areas) if areas else None
 
-class Magazine:
+
+
+
+
+#class Magazine:
     def __init__(self, name, category):
         self.name = name
         self.category = category
