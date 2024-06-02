@@ -76,24 +76,134 @@ class Author:
     def topic_areas(self):
         areas = set(article.magazine.category for article in self._articles)
         return list(areas) if areas else None
+class Magazine:
+    all_magazines = []
 
-
-
-
-
-#class Magazine:
     def __init__(self, name, category):
-        self.name = name
-        self.category = category
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if len(name) < 2 or len(name) > 16:
+            raise ValueError("name must be between 2 and 16 characters")
+        if not isinstance(category, str):
+            raise TypeError("category must be a string")
+        if len(category) == 0:
+            raise ValueError("category must be longer than 0 characters")
+
+        self._name = name
+        self._category = category
+        self._articles = []
+        Magazine.all_magazines.append(self)
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        if not isinstance(new_name, str):
+            raise TypeError("name must be a string")
+        if len(new_name) < 2 or len(new_name) > 16:
+            raise ValueError("name must be between 2 and 16 characters")
+        self._name = new_name
+
+    @property
+    def category(self):
+        return self._category
+
+    @category.setter
+    def category(self, new_category):
+        if not isinstance(new_category, str):
+            raise TypeError("category must be a string")
+        if len(new_category) == 0:
+            raise ValueError("category must be longer than 0 characters")
+        self._category = new_category
 
     def articles(self):
-        pass
+        return list(self._articles)
 
     def contributors(self):
-        pass
+        return list(set(article.author for article in self._articles))
 
     def article_titles(self):
-        pass
+        titles = [article.title for article in self._articles]
+        return titles if titles else None
 
     def contributing_authors(self):
-        pass
+        author_counts = {}
+        for article in self._articles:
+            author = article.author
+            author_counts[author] = author_counts.get(author, 0) + 1
+        top_authors = [author for author, count in author_counts.items() if count > 2]
+        return top_authors if top_authors else None
+
+    @classmethod
+    def top_publisher(cls):
+        if not cls.all_magazines:
+            return None
+        return max(cls.all_magazines, key=lambda mag: len(mag._articles))
+
+class Magazine:
+    all_magazines = []
+
+    def __init__(self, name, category):
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if len(name) < 2 or len(name) > 16:
+            raise ValueError("name must be between 2 and 16 characters")
+        if not isinstance(category, str):
+            raise TypeError("category must be a string")
+        if len(category) == 0:
+            raise ValueError("category must be longer than 0 characters")
+
+        self._name = name
+        self._category = category
+        self._articles = []
+        Magazine.all_magazines.append(self)
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        if not isinstance(new_name, str):
+            raise TypeError("name must be a string")
+        if len(new_name) < 2 or len(new_name) > 16:
+            raise ValueError("name must be between 2 and 16 characters")
+        self._name = new_name
+
+    @property
+    def category(self):
+        return self._category
+
+    @category.setter
+    def category(self, new_category):
+        if not isinstance(new_category, str):
+            raise TypeError("category must be a string")
+        if len(new_category) == 0:
+            raise ValueError("category must be longer than 0 characters")
+        self._category = new_category
+
+    def articles(self):
+        return list(self._articles)
+
+    def contributors(self):
+        return list(set(article.author for article in self._articles))
+
+    def article_titles(self):
+        titles = [article.title for article in self._articles]
+        return titles if titles else None
+
+    def contributing_authors(self):
+        author_counts = {}
+        for article in self._articles:
+            author = article.author
+            author_counts[author] = author_counts.get(author, 0) + 1
+        top_authors = [author for author, count in author_counts.items() if count > 2]
+        return top_authors if top_authors else None
+
+    @classmethod
+    def top_publisher(cls):
+        if not cls.all_magazines:
+            return None
+        return max(cls.all_magazines, key=lambda mag: len(mag._articles))
