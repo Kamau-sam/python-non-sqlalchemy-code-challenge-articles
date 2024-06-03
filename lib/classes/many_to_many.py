@@ -15,6 +15,7 @@ class Article:
         self._magazine = magazine
         self._title = title
 
+        # Update relationships to maintain consistency
         author._articles.append(self)
         magazine._articles.append(self)
         Article.all.append(self)
@@ -22,7 +23,6 @@ class Article:
     @property
     def title(self):
         return self._title
-
 
     @property
     def author(self):
@@ -32,6 +32,7 @@ class Article:
     def author(self, new_author):
         if not isinstance(new_author, Author):
             raise TypeError("author must be an instance of Author")
+        # Update relationships when author changes
         self._author._articles.remove(self)
         self._author = new_author
         new_author._articles.append(self)
@@ -44,6 +45,7 @@ class Article:
     def magazine(self, new_magazine):
         if not isinstance(new_magazine, Magazine):
             raise TypeError("magazine must be an instance of Magazine")
+        # Update relationships when magazine changes
         self._magazine._articles.remove(self)
         self._magazine = new_magazine
         new_magazine._articles.append(self)
@@ -66,7 +68,6 @@ class Author:
     def name(self):
         return self._name
 
-
     def articles(self):
         return list(self._articles)
 
@@ -77,6 +78,7 @@ class Author:
         return Article(self, magazine, title)
 
     def topic_areas(self):
+        # Use set to get unique categories
         areas = set(article.magazine.category for article in self._articles)
         return list(areas) if areas else None
 
@@ -133,6 +135,7 @@ class Magazine:
         return [article.title for article in self._articles] or None
 
     def contributing_authors(self):
+        # Count each author's contributions to find top contributors
         author_counts = {}
         for article in self._articles:
             author = article.author
@@ -144,4 +147,5 @@ class Magazine:
     def top_publisher(cls):
         if not cls.all_magazines:
             return None
+        # Use max with a key function to find the magazine with the most articles
         return max(cls.all_magazines, key=lambda mag: len(mag._articles))
