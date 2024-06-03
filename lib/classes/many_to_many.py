@@ -1,55 +1,64 @@
-
 class Article:
     all = []
 
     def __init__(self, author, magazine, title):
-        if not isinstance(author, Author):
-            raise TypeError("author must be an instance of Author")
-        if not isinstance(magazine, Magazine):
-            raise TypeError("magazine must be an instance of Magazine")
-        if not isinstance(title, str):
-            raise TypeError("title must be a string")
-        if len(title) < 5 or len(title) > 50:
-            raise ValueError("title must be between 5 and 50 characters")
-
-        self._author = author
-        self._magazine = magazine
-        self._title = title
-
-        # Update relationships to maintain consistency
-        author._articles.append(self)
-        magazine._articles.append(self)
+        self.author = author
+        self.magazine = magazine
+        self._title = str(title)
         Article.all.append(self)
 
     @property
     def title(self):
         return self._title
 
+    @title.setter
+    def title(self, title):
+        # Check if the title attribute already exists to prevent changes
+        if hasattr(self, "title"):
+            raise AttributeError("Title cannot be changed")
+        else:
+            # Ensure the title is a string and meets length requirements
+            if isinstance(title, str):
+                if 5 <= len(title) <= 50:
+                    self._title = title
+                else:
+                    raise ValueError("Title must be between 5 and 50 characters")
+            else:
+                raise TypeError("Title must be a string")
     @property
     def author(self):
         return self._author
-
-    @author.setter
-    def author(self, new_author):
-        if not isinstance(new_author, Author):
-            raise TypeError("author must be an instance of Author")
-        # Update relationships when author changes
-        self._author._articles.remove(self)
-        self._author = new_author
-        new_author._articles.append(self)
 
     @property
     def magazine(self):
         return self._magazine
 
+    @author.setter
+    def author(self, author):
+        # Validate that the author is an instance of the Author class
+        if isinstance(author, Author):
+            self._author = author
+        else:
+            raise TypeError("Author must be of type Author")
+
     @magazine.setter
-    def magazine(self, new_magazine):
-        if not isinstance(new_magazine, Magazine):
-            raise TypeError("magazine must be an instance of Magazine")
-        # Update relationships when magazine changes
-        self._magazine._articles.remove(self)
-        self._magazine = new_magazine
-        new_magazine._articles.append(self)
+    def magazine(self, magazine):
+        # Validate that the magazine is an instance of the Magazine class
+        if isinstance(magazine, Magazine):
+            self._magazine = magazine
+        else:
+            raise TypeError("Magazine must be of type Magazine")
+
+
+
+
+
+
+
+
+
+
+
 
 
 
