@@ -51,6 +51,7 @@ class Article:
         new_magazine._articles.append(self)
 
 
+
 class Author:
     all_authors = []
 
